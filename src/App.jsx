@@ -13,106 +13,41 @@ import CategoryProducts from "./pages/CategoryProducts.jsx";
 import Profile from "./pages/Profile.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import SearchResults from "./pages/SearchResults.jsx";
-import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
-import AdminProducts from "./pages/admin/AdminProducts.jsx";
-import AdminOrders from "./pages/admin/AdminOrders.jsx";
-import AdminVendors from "./pages/admin/AdminVendors.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 // Context
 import { AuthProvider } from "./context/AuthContext.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Navbar />
-
         <Routes>
-          {/* Public routes */}
+          {/* Home and Auth */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginRegister />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/categories" element={<CategoryPage />} />
-          <Route path="/category/:name" element={<CategoryProducts />} />
+
+          {/* User pages */}
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/search" element={<SearchResults />} />
 
-          {/* User protected routes */}
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute role="user">
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/wishlist"
-            element={
-              <ProtectedRoute role="user">
-                <Wishlist />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orders"
-            element={
-              <ProtectedRoute role="user">
-                <Orders />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/cart"
-            element={
-              <ProtectedRoute role="user">
-                <CartPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/checkout"
-            element={
-              <ProtectedRoute role="user">
-                <Checkout />
-              </ProtectedRoute>
-            }
-          />
+          {/* Orders and Cart */}
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<Checkout />} />
 
-          {/* Admin protected routes */}
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/products"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminProducts />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/orders"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminOrders />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/vendors"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminVendors />
-              </ProtectedRoute>
-            }
-          />
+          {/* Products */}
+          <Route path="/product/:id" element={<ProductDetails />} />
+
+          {/* Categories */}
+          <Route path="/categories" element={<CategoryPage />} />
+          <Route path="/category/:name" element={<CategoryProducts />} />
+
+          {/* Admin */}
+          <Route path="/admin" element={<AdminDashboard />} />
 
           {/* 404 fallback */}
           <Route path="*" element={<NotFound />} />
