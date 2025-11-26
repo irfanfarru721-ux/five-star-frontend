@@ -21,11 +21,11 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const [prodRes, modRes, catRes, subRes, venRes] = await Promise.all([
-          axios.get("https://fivestar-backend.onrender.com/api/products"),
-          axios.get("https://fivestar-backend.onrender.com/api/modules"),
-          axios.get("https://fivestar-backend.onrender.com/api/categories"),
-          axios.get("https://fivestar-backend.onrender.com/api/subcategories"),
-          axios.get("https://fivestar-backend.onrender.com/api/vendors"),
+          axios.get("https://super-backend-bzin.onrender.com/api/products"),
+          axios.get("https://super-backend-bzin.onrender.com/api/modules"),
+          axios.get("https://super-backend-bzin.onrender.com/api/categories"),
+          axios.get("https://super-backend-bzin.onrender.com/api/subcategories"),
+          axios.get("https://super-backend-bzin.onrender.com/api/vendors"),
         ]);
 
         setProducts(prodRes.data);
