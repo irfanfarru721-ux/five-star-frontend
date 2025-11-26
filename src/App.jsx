@@ -13,41 +13,68 @@ import CategoryProducts from "./pages/CategoryProducts.jsx";
 import Profile from "./pages/Profile.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import SearchResults from "./pages/SearchResults.jsx";
-import AdminDashboard from "./pages/AdminDashboard.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 // Context
 import { AuthProvider } from "./context/AuthContext.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Navbar />
+
         <Routes>
-          {/* Home and Auth */}
+          {/* Public routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginRegister />} />
-
-          {/* User pages */}
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/search" element={<SearchResults />} />
-
-          {/* Orders and Cart */}
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<Checkout />} />
-
-          {/* Products */}
           <Route path="/product/:id" element={<ProductDetails />} />
-
-          {/* Categories */}
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/category/:name" element={<CategoryProducts />} />
+          <Route path="/search" element={<SearchResults />} />
 
-          {/* Admin */}
-          <Route path="/admin" element={<AdminDashboard />} />
+          {/* User protected routes */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute role="user">
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/wishlist"
+            element={
+              <ProtectedRoute role="user">
+                <Wishlist />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute role="user">
+                <Orders />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute role="user">
+                <CartPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute role="user">
+                <Checkout />
+              </ProtectedRoute>
+            }
+          />
 
           {/* 404 fallback */}
           <Route path="*" element={<NotFound />} />
