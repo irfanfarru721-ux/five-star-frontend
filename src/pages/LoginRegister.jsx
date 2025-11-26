@@ -1,87 +1,55 @@
-import React, { useState, useContext } from "react";
-import { loginUser, registerUser } from "../api/api.js";
-import { AuthContext } from "../context/AuthContext.jsx";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginUser, registerUser } from "../api/api.js"; // optional backend functions
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function LoginRegister() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [name, setName] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUser, setToken } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [role, setRole] = useState("user"); // default role
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      if (isLogin) {
-        const res = await loginUser({ email, password });
-
-        setUser(res.data.user);
-        setToken(res.data.token);
-
-        localStorage.setItem("token", res.data.token);
-
-        navigate("/");
-      } else {
-        const res = await registerUser({
-          name,
-          email,
-          password,
-          role: "customer"   // ⭐ REQUIRED FOR BACKEND
-        });
-
-        alert("Registered successfully! Now login.");
-        setIsLogin(true);
-      }
-    } catch (err) {
-      alert(err.response?.data?.message || "Auth failed");
-    }
+    // For demo purposes, directly login user
+    login({ email, role });
+    navigate("/"); // redirect to home after login
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">{isLogin ? "Login" : "Register"}</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-3 bg-white p-4 rounded shadow">
-        {!isLogin && (
-          <input
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border p-2 w-full"
-            placeholder="Full name"
-          />
-        )}
-
+    <div className="max-w-md mx-auto px-4 py-6">
+      <h1 className="text-2xl font-bold mb-4">Login / Signup</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
-          required
+          type="email"
+          placeholder="Email"
+          className="w-full p-2 border rounded"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 w-full"
-          placeholder="Email"
-        />
-
-        <input
           required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 w-full"
+        />
+        <input
           type="password"
           placeholder="Password"
+          className="w-full p-2 border rounded"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
         />
-
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="w-full p-2 border rounded"
+        >
+          <option value="user">User</option>
+        </select>
         <button className="w-full bg-blue-600 text-white p-2 rounded">
-          {isLogin ? "Login" : "Register"}
+          Login / Signup
         </button>
       </form>
-
-      <div className="text-center mt-3">
-        <button className="text-blue-600" onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? "Create an account" : "Have an account? Login"}
-        </button>
-      </div>
     </div>
   );
 }
